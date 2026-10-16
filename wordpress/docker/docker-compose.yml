@@ -4,6 +4,8 @@ services:
   db:
     image: postgres:16.0-bookworm
     container_name: faDb
+    ports:
+      - 5432:5432
     environment:
       PGDATA: /var/lib/postgresql/data/pgdata
       POSTGRES_USER: ${POSTGRES_USER}
@@ -30,7 +32,7 @@ services:
       DATABASE_ROOT_USERNAME: ${POSTGRES_USER}
       DATABASE_URL: jdbc:postgresql://db:5432/fusionauth
       DATABASE_USERNAME: ${DATABASE_USERNAME}
-      FUSIONAUTH_APP_INSTALLATION_SOURCE: fusionauth-quickstart-wordpress-web
+      FUSIONAUTH_APP_INSTALLATION_SOURCE: fusionauth-import-scripts/wordpress
       FUSIONAUTH_APP_KICKSTART_FILE: ${FUSIONAUTH_APP_KICKSTART_FILE}
       FUSIONAUTH_APP_MEMORY: ${FUSIONAUTH_APP_MEMORY}
       FUSIONAUTH_APP_RUNTIME_MODE: ${FUSIONAUTH_APP_RUNTIME_MODE}
@@ -48,7 +50,6 @@ services:
   wpdb:
     image: mysql:9.7
     container_name: wpDb
-    platform: linux/amd64
     networks:
       - wp
     ports:
@@ -64,7 +65,6 @@ services:
   wp:
     image: wordpress:7.0
     container_name: wp
-    platform: linux/amd64
     depends_on:
       - wpdb
       - fusionauth
